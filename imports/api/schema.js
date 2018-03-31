@@ -1,11 +1,26 @@
 import SimpleSchema from 'simpl-schema';
+import { TypeOfQuestions, allTypesOfQuestions } from '../constants/question-types';
+
+export const QuestionnaireEntrySchema = new SimpleSchema({
+  type: {
+    type: String,
+    allowedValues: allTypesOfQuestions,
+  }, // Type of question
+  entryId: String, // _id of {Question<Type>}
+});
 
 export const QuestionnaireSchema = new SimpleSchema({
   questions: {
     type: Array
   },
-  'questions.$': String, // _id of <Question>
-  root: String
+  'questions.$': QuestionnaireEntrySchema,
+
+  root: String,
+  accessTokens: {
+    type: Array,
+    optional: true,
+  },
+  'accessTokens.$': String,
 });
 
 export const QuestionnaireCreation = function(questions, root) {

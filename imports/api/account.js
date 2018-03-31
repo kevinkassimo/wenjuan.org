@@ -6,11 +6,8 @@ import { isEmailAddress } from './util';
 export const createNewProfileObject = function createNewProfileObject() {
   return {
     name: '(Name of set)',
-    bio: '(Bio not set)',
     avatar: null,
-    url: null,
-    contacts: [],
-    messages: [],
+    questionnaires: {},
   }
 };
 

@@ -6,8 +6,6 @@ import '/imports/api/user';
 import '/imports/api/account';
 import '/imports/api/email';
 import '/imports/api/image';
-import '/imports/api/url';
-import '/imports/api/message';
 
 import '/imports/api/database';
 import '/imports/api/questionnaire';

@@ -1,37 +1,38 @@
 import SimpleSchema from 'simpl-schema';
-import ContactType from '../constants/contact-types';
 
-/*
-Usage:
-let isOkay = ProfileSchema.validate(data)
-let cleanedData = ProfileSchema.clean(data)
- */
-export const ProfileSchema = new SimpleSchema({
-  name: String,
-  bio: String, // biography
-  avatar: String, // imageId at Image collection
-  url: String, // custom url of one's profile
-  contacts: [Object],
-  messages: [Object],
-}, {
-  clean: {
-    trimStrings: true,
-    removeNullsFromArrays: true,
+export const QuestionnaireSchema = new SimpleSchema({
+  questions: {
+    type: Array
   },
-},);
-
-export const ContactSchema = new SimpleSchema({
-  type: String,
-  enabled: Boolean,
-  metadata: Object,
+  'questions.$': String, // _id of <Question>
+  root: String
 });
 
-export const EmailContactMetadataSchema = new SimpleSchema({
-  address: String
+export const QuestionSchema = new SimpleSchema({
+  type: {
+    type: String,
+    allowedValues: ['numeric', 'string', 'selection']
+  },
+  optional: Boolean,
+  description: String,
+  restriction: String
 });
 
-export const MessageSchema = new SimpleSchema({
-  from: String,
-  body: String,
+export const AnswerCollectionSchema = new SimpleSchema({
+  responses: {
+    type: Array
+  },
+  'responses.$': String
 });
 
+export const AnswerSheetSchema = new SimpleSchema({
+  questionnaire: String,
+  answers: {
+    type: Array
+  },
+  'answers.$': String
+});
+
+export AnswerSchema = new SimpleSchema({
+      question: String,    payload: Object
+});

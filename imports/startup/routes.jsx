@@ -18,6 +18,7 @@ export const renderRoutes = () => (
       <Route path="/login"
              component={(props) => Meteor.user() ? (<Dashboard {...props} />) : (<Login {...props} />)}/>
       <Route path="/user/:customUrl" component={(props) => <Userpage {...props} /> } />
+      <Route path="/testDB"
     </div>
   </BrowserRouter>
 );

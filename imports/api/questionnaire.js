@@ -27,8 +27,9 @@ if (Meteor.isServer) {
         throw new Meteor.Error(QuestionnaireSchema.validationErrors());
       }
 
-      Questionnaires.insert(questionnaireObject);
+      return Questionnaires.insert(questionnaireObject);
     },
+
     'questionnaire.remove': function remove(id) {
       check(id, String);
 
@@ -36,7 +37,11 @@ if (Meteor.isServer) {
         throw new Meteor.Error('Please specify the id of the questionnaire to delete');
       }
 
+      return Questionnaires.remove({_id: Meteor.Collection.ObjectID(id)});
+    },
 
+    'questionnaire.fetchAll': function fetchAll() {
+      return Questionnaires.find({}).fetch();
     }
   });
 }

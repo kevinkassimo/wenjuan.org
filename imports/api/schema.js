@@ -34,5 +34,6 @@ export const AnswerSheetSchema = new SimpleSchema({
 });
 
 export const AnswerSchema = new SimpleSchema({
-      question: String,    payload: Object
+  question: String,
+  payload: Object
 });

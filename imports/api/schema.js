@@ -33,6 +33,6 @@ export const AnswerSheetSchema = new SimpleSchema({
   'answers.$': String
 });
 
-export AnswerSchema = new SimpleSchema({
+export const AnswerSchema = new SimpleSchema({
       question: String,    payload: Object
 });

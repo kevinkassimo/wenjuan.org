@@ -5,7 +5,7 @@ import * as Schema from './schema';
 
 function checkDB(db) {
   check(db, String);
-  allDBs = ['Questionnaire', 'Question', 'AnswerCollection', 'AnswerSheet', 'Answer'];
+  allDBs = ['Questionnaire', 'Numeric', 'Text', 'Selection', 'AnswerCollection', 'AnswerSheet', 'Answer'];
   if (!allDBs.includes(db)) {
     throw new Meteor.Error(`specified DB ${db} does not exist.`);
   }

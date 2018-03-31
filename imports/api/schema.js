@@ -49,6 +49,55 @@ export const QuestionCreation = function(type, optional, desc, restriction) {
   }
 };
 
+export const NumericSchema = new SimpleSchema({
+  optional: Boolean,
+  description: String,
+  restriction: String
+});
+
+export const NumericCreation = function(optional, desc, restriction) {
+  return {
+    optional: optional,
+    description: desc,
+    restriction: restriction
+  }
+};
+
+export const TextSchema = new SimpleSchema({
+  optional: Boolean,
+  description: String,
+  restriction: String
+});
+
+export const TextCreation = function(optional, desc, restriction) {
+  return {
+    optional: optional,
+    description: desc,
+    restriction: restriction
+  }
+};
+
+export const SelectionSchema = new SimpleSchema({
+  optional: Boolean,
+  description: String,
+  min: SimpleSchema.Integer,
+  max: SimpleSchema.Integer,
+  options: {
+    type: Array
+  },
+  'options.$': String
+});
+
+export const SelectionCreation = function(optional, desc, min, max, options) {
+  return {
+    optional: optional,
+    description: desc,
+    min: min,
+    max: max,
+    options: options
+  }
+};
+
 export const AnswerCollectionSchema = new SimpleSchema({
   responses: {
     type: Array

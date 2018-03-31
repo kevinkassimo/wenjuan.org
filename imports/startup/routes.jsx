@@ -6,7 +6,7 @@ import Home from '../ui/scenes/home/Home.jsx';
 import Dashboard from '../ui/scenes/dashboard/Dashboard.jsx';
 import Login from '../ui/scenes/login/Login.jsx';
 import Userpage from '../ui/scenes/userpage/Userpage.jsx';
-import Dbconnection from '../ui/scenes/tests/dbconnection.jsx';
+import Dbconnection from '../ui/scenes/userpage/connection.jsx';
 
 export const renderRoutes = () => (
   <BrowserRouter>
@@ -19,7 +19,7 @@ export const renderRoutes = () => (
       <Route path="/login"
              component={(props) => Meteor.user() ? (<Dashboard {...props} />) : (<Login {...props} />)}/>
       <Route path="/user/:customUrl" component={(props) => <Userpage {...props} /> } />
-      <Route path="/dbtest" component={(props) => <Dbconnection {...props} />} />
+      <Route path="/dbtest" component={(props) => <Dbconnection {...props} /> } />
     </div>
   </BrowserRouter>
 );

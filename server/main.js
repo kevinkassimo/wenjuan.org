@@ -9,6 +9,11 @@ import '/imports/api/image';
 import '/imports/api/url';
 import '/imports/api/message';
 
+import '/imports/api/database';
+import '/imports/api/questionnaire';
+import '/imports/api/schema';
+import '/imports/api/operations';
+
 if (Meteor.isServer) {
 
 }

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Questionnaires } from './database';
-import { QuestionnaireSchema } from './schema'
+import { QuestionnaireSchema } from './schema';
 
 function createNewQuestionnaire(questions, root) {
   return {
@@ -23,10 +23,6 @@ if (Meteor.isServer) {
       const questionnaireObject = createNewQuestionnaire(questions, root);
       QuestionnaireSchema.validate(questionnaireObject);
 
-      if (!QuestionnaireSchema.isValid()) {
-        throw new Meteor.Error(QuestionnaireSchema.validationErrors());
-      }
-
       return Questionnaires.insert(questionnaireObject);
     },
 
@@ -37,7 +33,27 @@ if (Meteor.isServer) {
         throw new Meteor.Error('Please specify the id of the questionnaire to delete');
       }
 
-      return Questionnaires.remove({_id: Meteor.Collection.ObjectID(id)});
+      return Questionnaires.remove({_id: id});
+    },
+
+    'questionnaire.update': function update(sel, mod) {
+      return Questionnaires.update(sel, mod, { multi: true });
+    },
+
+    'questionnaire.findOne': function findOne(sel) {
+      if (sel) {
+        return Questionnaires.findOne(sel);
+      } else {
+        return Questionnaires.findOne();
+      }
+    },
+
+    'questionnaire.find': function find(sel) {
+      if (sel) {
+        return Questionnaires.find(sel).fetch();
+      } else {
+        return Questionnaires.find().fetch();
+      }
     },
 
     'questionnaire.fetchAll': function fetchAll() {

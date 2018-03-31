@@ -1,14 +1,14 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
-import { Questionnaires } from './database';
+import { Questionnaires, Question } from './database';
 import { QuestionnaireSchema } from './schema';
 
 function createNewQuestionnaire(questions, root) {
   return {
     questions: questions,
     root: root
-  }
-};
+  };
+}
 
 if (Meteor.isServer) {
   Meteor.methods({
@@ -58,6 +58,35 @@ if (Meteor.isServer) {
 
     'questionnaire.fetchAll': function fetchAll() {
       return Questionnaires.find({}).fetch();
-    }
+    },
+
+    'questionnaire.prepare': function prepare(id, accessToken) {
+      check(id, String);
+
+      const currentUser = Meteor.user();
+      const profile = currentUser.profile;
+
+      // check if this questionnaire is actually belonging to the user
+      if (!(id in profile.questionnaire) && !profile.accessTokens.includes(accessToken)) {
+        throw new Meteor.Error('not authorized');
+      }
+
+      const q = Questionnaires.findOne({ _id: id });
+      if (!q) {
+        throw new Meteor.Error('no corresponding questionnaire found');
+      }
+
+      // Populate actual questions inside of prop 'questionObjects'
+      q.questionObjects = {};
+
+      for (let key of Object.getOwnPropertyNames(q.questions)) {
+        const oneQuestion = Question.findOne({ _id: q.questions[key] });
+        if (oneQuestion) {
+          q.questionObjects[key] = oneQuestion;
+        }
+      }
+
+      return q;
+    },
   });
 }

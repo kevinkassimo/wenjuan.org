@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { Accounts } from 'meteor/accounts-base';
+import {Button} from 'reactstrap';
 
 export default class Home extends Component {
   constructor(props) {
@@ -23,6 +24,7 @@ export default class Home extends Component {
         Home works!
         <button className="home-button" onClick={this.handleTest}>Click me</button>
         <button onClick={this.handleLogin}>Login</button>
+        <Button>123</Button>
       </div>
     )
   }

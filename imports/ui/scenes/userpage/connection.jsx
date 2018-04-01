@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Meteor } from 'meteor/meteor';
+import {TypeOfQuestions} from "../../../constants/question-types";
 
 export default class Dbconnection extends Component {
   constructor(props) {
@@ -11,6 +12,40 @@ export default class Dbconnection extends Component {
   }
 
   componentDidMount() {
+    Meteor.call('draft.save', null, {
+      questionObjects: [{
+        type: TypeOfQuestions.NUMBER,
+        optional: false,
+        description: 'This is a test for number',
+        body: {
+          restriction: {}
+        },
+      }],
+    }, (e, id) => {
+      if (e) {
+        console.log(e);
+        return;
+      }
+      console.log(`OK: _id of draft: ${id}`);
+
+      Meteor.call('draft.publishById', id, [ 'token' ], (e1, qid) => {
+        if (e1) {
+          console.log(e1);
+          return;
+        }
+        console.log(`OK: _id of published questionnaire: ${qid}`);
+
+        Meteor.call('questionnaire.download', qid, 'token', (e2, result) => {
+          if (e2) {
+            console.log(e2);
+            return;
+          }
+          console.log(`OK: questionnaire =`, result);
+        })
+      });
+    });
+
+    /*
     Meteor.call('operations.insert', 'Question', 'numeric', false, 'hi','none', (err, result) => {
       if (err) {
         console.log(err);
@@ -64,6 +99,7 @@ export default class Dbconnection extends Component {
         console.log(result);
       }
     });
+    */
   }
 
   render() {

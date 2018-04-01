@@ -1,21 +1,12 @@
 import SimpleSchema from 'simpl-schema';
 import { TypeOfQuestions, allTypesOfQuestions } from '../constants/question-types';
 
-export const QuestionnaireEntrySchema = new SimpleSchema({
-  type: {
-    type: String,
-    allowedValues: allTypesOfQuestions,
-  }, // Type of question
-  entryId: String, // _id of {Question<Type>}
-});
-
 export const QuestionnaireSchema = new SimpleSchema({
   questions: {
     type: Array
   },
-  'questions.$': QuestionnaireEntrySchema,
+  'questions.$': String,
 
-  root: String,
   accessTokens: {
     type: Array,
     optional: true,
@@ -23,80 +14,158 @@ export const QuestionnaireSchema = new SimpleSchema({
   'accessTokens.$': String,
 });
 
-export const QuestionnaireCreation = function(questions, root) {
-  return {
-    questions: questions,
-    root: root
-  }
+export const createQuestionnaire = (questions, accessTokens) => {
+  let ret = {
+    questions,
+    accessTokens,
+  };
+
+  QuestionnaireSchema.validate(ret);
+
+  return ret;
 };
 
 export const QuestionSchema = new SimpleSchema({
+  questionnaireId: {
+    type: String,
+    optional: true,
+  },
   type: {
     type: String,
-    allowedValues: ['numeric', 'string', 'selection']
+    allowedValues: allTypesOfQuestions,
   },
   optional: Boolean,
   description: String,
-  restriction: String
 });
 
-export const QuestionCreation = function(type, optional, desc, restriction) {
-  return {
-    type: type,
-    optional: optional,
-    description: desc,
-    restriction: restriction
-  }
-};
-
-export const NumericSchema = new SimpleSchema({
-  optional: Boolean,
-  description: String,
-  restriction: String
+const NumberRestrictionSchema = new SimpleSchema({});
+const NumberBodySchema = new SimpleSchema({
+  restriction: NumberRestrictionSchema,
 });
-
-export const NumericCreation = function(optional, desc, restriction) {
-  return {
-    optional: optional,
-    description: desc,
-    restriction: restriction
-  }
-};
-
-export const TextSchema = new SimpleSchema({
-  optional: Boolean,
-  description: String,
-  restriction: String
+const NumberQuestionSchema = new SimpleSchema({
+  body: NumberBodySchema,
 });
+NumberQuestionSchema.extend(QuestionSchema);
 
-export const TextCreation = function(optional, desc, restriction) {
-  return {
-    optional: optional,
-    description: desc,
-    restriction: restriction
-  }
-};
+const StringRestrictionSchema = new SimpleSchema({});
+const StringBodySchema = new SimpleSchema({
+  restriction: StringRestrictionSchema,
+});
+const StringQuestionSchema = new SimpleSchema({
+  body: StringBodySchema,
+});
+StringQuestionSchema.extend(QuestionSchema);
 
-export const SelectionSchema = new SimpleSchema({
-  optional: Boolean,
-  description: String,
-  min: SimpleSchema.Integer,
-  max: SimpleSchema.Integer,
+const OptionRestrictionSchema = new SimpleSchema({
+  unique: {
+    type: Boolean,
+    optional: true,
+  },
+  minSelectCount: {
+    type: SimpleSchema.Integer,
+    optional: true,
+  },
+  maxSelectCount: {
+    type: SimpleSchema.Integer,
+    optional: true
+  },
+});
+const OptionBodySchema = new SimpleSchema({
+  restriction: OptionRestrictionSchema,
   options: {
-    type: Array
+    type: Array,
+    optional: true,
   },
-  'options.$': String
+  'options.$': String,
 });
+const OptionQuestionSchema = new SimpleSchema({
+  body: OptionBodySchema,
+});
+OptionQuestionSchema.extend(QuestionSchema);
 
-export const SelectionCreation = function(optional, desc, min, max, options) {
-  return {
-    optional: optional,
-    description: desc,
-    min: min,
-    max: max,
-    options: options
+export { NumberQuestionSchema, StringQuestionSchema, OptionQuestionSchema };
+
+export const validateQuestion = function(question) {
+  let validator;
+  switch (question.type.toString().toLowerCase()) {
+    case TypeOfQuestions.NUMBER:
+      validator = NumberQuestionSchema;
+      break;
+    case TypeOfQuestions.STRING:
+      validator = StringQuestionSchema;
+      break;
+    case TypeOfQuestions.OPTION:
+      validator = OptionQuestionSchema;
+      break;
+    default:
+      return false
+  }
+
+  try {
+    validator.validate(question);
+    return true;
+  } catch (_) {
+    return false;
   }
 };
+
+export const createNumberQuestion = function(optional, description, restriction, questionnaireId = null) {
+  const ret = {
+    type: TypeOfQuestions.NUMBER,
+    optional,
+    description,
+    body: {
+      restriction,
+    },
+  };
+  if (questionnaireId) {
+    ret.questionnaireId = questionnaireId;
+  }
+  NumberQuestionSchema.validate(ret);
+  return ret;
+};
+
+export const createStringQuestion = function(optional, description, restriction, questionnaireId = null) {
+  const ret = {
+    type: TypeOfQuestions.STRING,
+    optional,
+    description,
+    body: {
+      restriction,
+    },
+  };
+  if (questionnaireId) {
+    ret.questionnaireId = questionnaireId;
+  }
+  StringQuestionSchema.validate(ret);
+  return ret;
+};
+
+export const createOptionQuestion = function(optional, description, options, restriction, questionnaireId = null) {
+  const ret = {
+    type: TypeOfQuestions.OPTION,
+    optional,
+    description,
+    body: {
+      options,
+      restriction,
+    },
+  };
+  if (questionnaireId) {
+    ret.questionnaireId = questionnaireId;
+  }
+  OptionQuestionSchema.validate(ret);
+  return ret;
+};
+
+export const DraftSchema = new SimpleSchema({
+  questionObjects: {
+    type: Array,
+  },
+  'questionObjects.$': {
+    type: SimpleSchema.oneOf(NumberQuestionSchema, StringQuestionSchema, OptionQuestionSchema)
+  },
+});
 
 export const AnswerCollectionSchema = new SimpleSchema({
   responses: {

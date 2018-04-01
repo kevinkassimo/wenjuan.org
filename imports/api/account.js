@@ -7,7 +7,7 @@ export const createNewProfileObject = function createNewProfileObject() {
   return {
     name: '(Name of set)',
     avatar: null,
-    questionnaires: {},
+    questionnaires: [],
   }
 };
 

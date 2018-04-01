@@ -8,6 +8,7 @@ import Login from '../ui/scenes/login/Login.jsx';
 import Userpage from '../ui/scenes/userpage/Userpage.jsx';
 import Dbconnection from '../ui/scenes/userpage/connection.jsx';
 import Editor from '../ui/scenes/userpage/Editor.jsx';
+import Questionnaire from '../ui/scenes/questionnaire/Questionnaire.jsx';
 
 export const renderRoutes = () => (
   <BrowserRouter>
@@ -22,6 +23,7 @@ export const renderRoutes = () => (
       <Route path="/user/:customUrl" component={(props) => <Userpage {...props} /> } />
       <Route path="/dbtest" component={(props) => <Dbconnection {...props} /> } />
       <Route path="/edit/:_id" component={(props) => <Editor {...props} />} />
+      <Route path="/answer/:_id" component={(props) => <Questionnaire {...props} />} />
     </div>
   </BrowserRouter>
 );

@@ -1,5 +1,6 @@
 import SimpleSchema from 'simpl-schema';
 import { TypeOfQuestions, allTypesOfQuestions } from '../constants/question-types';
+import { allTypesOfNumberInputs, allTypesOfStringInputs, allTypesOfOptionTypes } from "../constants/input-types";
 
 export const QuestionnaireSchema = new SimpleSchema({
   questions: {
@@ -44,6 +45,10 @@ const NumberBodySchema = new SimpleSchema({
 });
 const NumberQuestionSchema = new SimpleSchema({
   body: NumberBodySchema,
+  subtype: {
+    type: String,
+    allowedValues: allTypesOfNumberInputs,
+  },
 });
 NumberQuestionSchema.extend(QuestionSchema);
 
@@ -53,6 +58,10 @@ const StringBodySchema = new SimpleSchema({
 });
 const StringQuestionSchema = new SimpleSchema({
   body: StringBodySchema,
+  subtype: {
+    type: String,
+    allowedValues: allTypesOfStringInputs,
+  },
 });
 StringQuestionSchema.extend(QuestionSchema);
 
@@ -80,6 +89,10 @@ const OptionBodySchema = new SimpleSchema({
 });
 const OptionQuestionSchema = new SimpleSchema({
   body: OptionBodySchema,
+  subtype: {
+    type: String,
+    allowedValues: allTypesOfOptionTypes,
+  },
 });
 OptionQuestionSchema.extend(QuestionSchema);
 

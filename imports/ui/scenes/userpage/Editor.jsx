@@ -95,9 +95,9 @@ export default class Editor extends Component {
         }}>新选择问题</button>
       </div>
     )];
-    for (var i = 0; i < this.state.draft.questionObjects.length; i++) {
+    for (let i = 0; i < this.state.draft.questionObjects.length; i++) {
       let ind = i;
-      var curr = this.state.draft.questionObjects[i];
+      let curr = this.state.draft.questionObjects[i];
       if (curr.type === 'number') {
         questions.push(
           <Number
@@ -110,45 +110,58 @@ export default class Editor extends Component {
             }}
             onClick={() => {
               this.setState((prevState) => {
-                const newState = update(prevState, {
+                return update(prevState, {
                   draft: {
                     questionObjects: {
                       $splice: [[ ind, 1 ]],
                     },
                   },
                 });
-                return newState;
               });
             }}
           />);
       } else if (curr.type === 'string') {
         questions.push(
           <Text
-            id={i}
-            key={i}
+            id={ind}
+            key={ind}
             value={curr.description}
             onChange={(content) => {
               curr.description = content;
               this.setState({draft: this.state.draft});
             }}
             onClick={() => {
-              this.state.draft.questionObjects.splice(i, 1);
-              this.setState({draft: this.state.draft});
+              this.setState((prevState) => {
+                return update(prevState, {
+                  draft: {
+                    questionObjects: {
+                      $splice: [[ ind, 1 ]],
+                    },
+                  },
+                });
+              });
             }}
           />);
       } else {
         questions.push(
           <Option
-            id={i}
-            key={i}
+            id={ind}
+            key={ind}
             value={curr.description}
             onChange={(content) => {
               curr.description = content;
               this.setState({draft: this.state.draft});
             }}
             onClick={() => {
-              this.state.draft.questionObjects.splice(i, 1);
-              this.setState({draft: this.state.draft});
+              this.setState((prevState) => {
+                return update(prevState, {
+                  draft: {
+                    questionObjects: {
+                      $splice: [[ ind, 1 ]],
+                    },
+                  },
+                });
+              });
             }}
             options={curr.options}
           />);

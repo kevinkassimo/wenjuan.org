@@ -36,9 +36,15 @@ class Option extends Component {
   }
 
   render() {
-    return (
-      <Selection title={this.props.value} notifyParent={() => console.log('Notified')} onStateChange={({ target }) => this.props.onChange(target.value)} choices={this.props.choices}/>
-    );
+    if(this.props.unique){
+      return (
+        <Selection title={this.props.value} notifyParent={() => console.log('Notified')} onStateChange={({ target }) => this.props.onChange(target.value)} choices={this.props.choices}/>
+      );
+    } else {
+      return (
+        <MultiSelection title={this.props.value} notifyParent={() => console.log('Notified')} onStateChange={({ target }) => this.props.onChange(target.value)} choices={this.props.choices}/>
+      );
+    } 
   }
 }
 
@@ -146,6 +152,7 @@ export default class Questionnaire extends Component {
               this.setState({questionnaire: this.state.questionnaire});
             }}
             choices={curr.body.options}
+            unique = {curr.body.restriction.unique}
             onClick={() => {
               this.setState((prevState) => {
                 const newState = update(prevState, {

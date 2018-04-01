@@ -4,13 +4,7 @@ import { Button, ButtonGroup, Form, FormGroup, Label, Input, FormText } from 're
 import { Alert } from 'reactstrap';
 import FilteredMultiSelect from 'react-filtered-multiselect'
 
-const CULTURE_SHIPS = [
-  {id: 1, name: 'option 1'},
-  {id: 2, name: 'option 2'},
-// ...
-  {id: 249, name: 'option *'},
-  {id: 250, name: 'option /'}
-]
+
 
 export const TextField = class TextField extends Component {
     constructor(props) {
@@ -212,6 +206,22 @@ export const MultiSelection = class MultiSelection extends Component {
             selectedShips: [],
         };
     }  
+    /*
+    const CULTURE_SHIPS = [
+        {id: 1, name: 'option 1'},
+        {id: 2, name: 'option 2'},
+    // ...
+        {id: 249, name: 'option *'},
+        {id: 250, name: 'option /'}
+    ]
+    for(int i = 1; i <= this.props.)
+    choices.map((str) => {CULTURE_SHIPS.push{id=, name={str}}
+                        )})
+*/
+
+
+
+
  
     handleDeselect(index) {
         var selectedShips = this.state.selectedShips.slice()
@@ -226,13 +236,20 @@ export const MultiSelection = class MultiSelection extends Component {
     render() {
         const {
             title,
+            onStateChange,
+            choices,
         } = this.props;
+
+        var CULTURE_SHIPS = [];
+        for (var i = 1; i <= choices.length; i++) {
+            CULTURE_SHIPS.push({id: i, name: choices[i]});
+        }
 
         var {selectedShips} = this.state;
         return (
             <div>
                 <Alert color="warning">
-                        {title}: select only one option
+                        {title}: select more than one option
                 </Alert>
                 <FilteredMultiSelect
                     onChange={this.handleSelectionChange}

@@ -34,7 +34,7 @@ export class TypeOfOptionInputs {
   static get SELECT() { return 'select'; }
 }
 
-export const allTypesOfOptionTypes = [
+export const allTypesOfOptionInput = [
   TypeOfOptionInputs.DROPDOWN,
   TypeOfOptionInputs.MULTISELECT,
   TypeOfOptionInputs.SELECT

@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Questionnaire, Question, Draft } from './database';
-import {createNumberQuestion, createOptionQuestion, QuestionnaireSchema, DraftSchema} from './schema';
+import {createNumberQuestion, createOptionQuestion, createStringQuestion, QuestionnaireSchema, DraftSchema} from './schema';
 import {TypeOfQuestions} from "../constants/question-types";
 
 const createQuestionnaire = (d, accessTokens = []) => {
@@ -25,6 +25,7 @@ const createQuestionnaire = (d, accessTokens = []) => {
   let populatedQuestions = [];
   for (let question of questionObjects) {
     const {
+      subtype,
       optional,
       description,
       type,
@@ -39,13 +40,13 @@ const createQuestionnaire = (d, accessTokens = []) => {
     let createdQuestion;
     switch (type.toString().toLowerCase()) {
       case TypeOfQuestions.NUMBER:
-        createdQuestion = createNumberQuestion(optional, description, restriction, questionnaireId);
+        createdQuestion = createNumberQuestion(subtype, optional, description, restriction, questionnaireId);
         break;
       case TypeOfQuestions.STRING:
-        createdQuestion = createStringQuestion(optional, description, restriction, questionnaireId);
+        createdQuestion = createStringQuestion(subtype, optional, description, restriction, questionnaireId);
         break;
       case TypeOfQuestions.OPTION:
-        createdQuestion = createOptionQuestion(optional, description, options, restriction, questionnaireId);
+        createdQuestion = createOptionQuestion(subtype, optional, description, options, restriction, questionnaireId);
         break;
       default:
         throw new Meteor.Error('invalid type');
@@ -82,6 +83,7 @@ if (Meteor.isServer) {
     },
     'draft.publishById': function publish(_id, accessTokens = []) {
       check(_id, String);
+      check(accessTokens, Array);
 
       if (!Meteor.userId()) {
         throw new Meteor.Error('Cannot publish draft: not logged in');
@@ -94,14 +96,15 @@ if (Meteor.isServer) {
 
       return createQuestionnaire(draft, accessTokens); // _id of created Questionnaire
     },
-    'draft.publish': function publish(draft) {
+    'draft.publish': function publish(draft, accessTokens = []) {
       check(draft, Object);
+      check(accessTokens, Array);
 
       if (!Meteor.userId()) {
         throw new Meteor.Error('Cannot publish draft: not logged in');
       }
 
-      return createQuestionnaire(draft); // _id of created Questionnaire
+      return createQuestionnaire(draft, accessTokens); // _id of created Questionnaire
     },
     'draft.remove': function remove(_id) {
       check(_id, String);

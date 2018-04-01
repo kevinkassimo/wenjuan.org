@@ -1,6 +1,6 @@
 import SimpleSchema from 'simpl-schema';
 import { TypeOfQuestions, allTypesOfQuestions } from '../constants/question-types';
-import { allTypesOfNumberInputs, allTypesOfStringInputs, allTypesOfOptionTypes } from "../constants/input-types";
+import { allTypesOfNumberInputs, allTypesOfStringInputs, allTypesOfOptionInputs } from "../constants/input-types";
 
 export const QuestionnaireSchema = new SimpleSchema({
   questions: {
@@ -91,7 +91,7 @@ const OptionQuestionSchema = new SimpleSchema({
   body: OptionBodySchema,
   subtype: {
     type: String,
-    allowedValues: allTypesOfOptionTypes,
+    allowedValues: allTypesOfOptionInputs,
   },
 });
 OptionQuestionSchema.extend(QuestionSchema);
@@ -122,7 +122,7 @@ export const validateQuestion = function(question) {
   }
 };
 
-export const createNumberQuestion = function(optional, description, restriction, questionnaireId = null) {
+export const createNumberQuestion = function(subtype, optional, description, restriction, questionnaireId = null) {
   const ret = {
     type: TypeOfQuestions.NUMBER,
     optional,
@@ -130,6 +130,7 @@ export const createNumberQuestion = function(optional, description, restriction,
     body: {
       restriction,
     },
+    subtype,
   };
   if (questionnaireId) {
     ret.questionnaireId = questionnaireId;
@@ -138,7 +139,7 @@ export const createNumberQuestion = function(optional, description, restriction,
   return ret;
 };
 
-export const createStringQuestion = function(optional, description, restriction, questionnaireId = null) {
+export const createStringQuestion = function(subtype, optional, description, restriction, questionnaireId = null) {
   const ret = {
     type: TypeOfQuestions.STRING,
     optional,
@@ -146,6 +147,7 @@ export const createStringQuestion = function(optional, description, restriction,
     body: {
       restriction,
     },
+    subtype,
   };
   if (questionnaireId) {
     ret.questionnaireId = questionnaireId;
@@ -154,7 +156,7 @@ export const createStringQuestion = function(optional, description, restriction,
   return ret;
 };
 
-export const createOptionQuestion = function(optional, description, options, restriction, questionnaireId = null) {
+export const createOptionQuestion = function(subtype, optional, description, options, restriction, questionnaireId = null) {
   const ret = {
     type: TypeOfQuestions.OPTION,
     optional,
@@ -163,6 +165,7 @@ export const createOptionQuestion = function(optional, description, options, res
       options,
       restriction,
     },
+    subtype,
   };
   if (questionnaireId) {
     ret.questionnaireId = questionnaireId;
@@ -176,11 +179,20 @@ export const DraftSchema = new SimpleSchema({
     type: String,
     optional: true,
   },
+  accessTokens: {
+    type: Array,
+    optional: true,
+  },
+  'accessTokens.$': String,
   questionObjects: {
     type: Array,
   },
   'questionObjects.$': {
-    type: SimpleSchema.oneOf(NumberQuestionSchema, StringQuestionSchema, OptionQuestionSchema)
+    type: Object,
+    blackbox: true,
+
+    // Following enforcement bugged out
+    // type: SimpleSchema.oneOf(NumberQuestionSchema, StringQuestionSchema, OptionQuestionSchema)
   },
 });
 

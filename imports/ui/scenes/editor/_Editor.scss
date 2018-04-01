@@ -1,0 +1,52 @@
+.editor {
+  &__sidebar {
+    position: fixed;
+    padding: 1em;
+    left: 0;
+    width: 15%;
+    background-color: azure;
+    height: 100%;
+
+    button {
+      margin: 1em;
+    }
+  }
+
+  &__tab {
+    position: fixed;
+    padding: 1em;
+    left: 15%;
+    width: 15%;
+    background-color: beige;
+    height: 100%;
+
+    button {
+      margin: 1em;
+    }
+  }
+
+  &__editTab {
+    position: fixed;
+    padding: 1em;
+    left: 30%;
+    width: 15%;
+    background-color: lemonchiffon;
+    height: 100%;
+
+    button {
+      margin: 1em;
+    }
+  }
+
+  &__save {
+    position: fixed;
+    right: 1em;
+    bottom: 1em;
+  }
+
+  &__publish {
+    position: fixed;
+    right: 1em;
+    bottom: 5em;
+  }
+}

@@ -159,6 +159,10 @@ export const createOptionQuestion = function(optional, description, options, res
 };
 
 export const DraftSchema = new SimpleSchema({
+  _id: {
+    type: String,
+    optional: true,
+  },
   questionObjects: {
     type: Array,
   },

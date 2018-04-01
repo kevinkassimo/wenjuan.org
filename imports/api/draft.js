@@ -16,8 +16,8 @@ const createQuestionnaire = (d, accessTokens = []) => {
 
   let questionnaireId = Questionnaire.insert(q);
 
-  if (Meteor.userId) {
-    Meteor.users.update({ _id: Meteor.userId }, { $push: { questionnaires: questionnaireId } });
+  if (Meteor.userId()) {
+    Meteor.users.update({ _id: Meteor.userId() }, { $push: { questionnaires: questionnaireId } });
   } else {
     console.log('User not logged in');
   }
@@ -83,7 +83,7 @@ if (Meteor.isServer) {
     'draft.publishById': function publish(_id, accessTokens = []) {
       check(_id, String);
 
-      if (!Meteor.userId) {
+      if (!Meteor.userId()) {
         throw new Meteor.Error('Cannot publish draft: not logged in');
       }
 
@@ -97,7 +97,7 @@ if (Meteor.isServer) {
     'draft.publish': function publish(draft) {
       check(draft, Object);
 
-      if (!Meteor.userId) {
+      if (!Meteor.userId()) {
         throw new Meteor.Error('Cannot publish draft: not logged in');
       }
 

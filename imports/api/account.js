@@ -36,10 +36,6 @@ if (Meteor.isServer) {
         throw new Meteor.Error('Email must be of email format');
       }
 
-      if (Meteor.users.findOne({ 'profile.url': url })) {
-        throw new Meteor.Error('URL has been used by someone else');
-      }
-
       const userObject = createNewUserObject(username, email, password);
 
       return Accounts.createUser(userObject);

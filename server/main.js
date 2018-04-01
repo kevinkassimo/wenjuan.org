@@ -11,6 +11,7 @@ import '/imports/api/database';
 import '/imports/api/questionnaire';
 import '/imports/api/schema';
 import '/imports/api/operations';
+import '/imports/api/draft'
 
 if (Meteor.isServer) {
 

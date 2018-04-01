@@ -27,24 +27,7 @@ function insertTestUsers() {
         name: `name${i}`,
         bio: `bio${i}`,
         avatar: null,
-        url: `url${i}`,
-        contacts: [
-          {
-            type: `email`,
-            enabled: i % 2 === 0,
-            metadata: {
-              address: `email${i}@hidden0.com`,
-            }
-          },
-          {
-            type: `email`,
-            enabled: i % 2 !== 0,
-            metadata: {
-              address: `email${i}@hidden1.com`,
-            }
-          },
-        ],
-        messages: []
+        questionnaires: [],
       }
     }
 

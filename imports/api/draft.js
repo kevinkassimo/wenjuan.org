@@ -17,7 +17,7 @@ const createQuestionnaire = (d, accessTokens = []) => {
   let questionnaireId = Questionnaire.insert(q);
 
   if (Meteor.userId()) {
-    Meteor.users.update({ _id: Meteor.userId() }, { $push: { questionnaires: questionnaireId } });
+    Meteor.users.update({ _id: Meteor.userId() }, { $push: { 'profile.questionnaires': questionnaireId } });
   } else {
     console.log('User not logged in');
   }

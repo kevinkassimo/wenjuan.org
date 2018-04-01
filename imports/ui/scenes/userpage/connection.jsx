@@ -35,7 +35,7 @@ export default class Dbconnection extends Component {
         }
         console.log(`OK: _id of published questionnaire: ${qid}`);
 
-        Meteor.call('questionnaire.download', qid, 'token', (e2, result) => {
+        Meteor.call('questionnaire.download', qid, (e2, result) => {
           if (e2) {
             console.log(e2);
             return;

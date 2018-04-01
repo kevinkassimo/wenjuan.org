@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { check } from 'meteor/check';
 import { Questionnaire, Question } from './database';
 import { QuestionnaireSchema } from './schema';
+import { inspect } from 'util';
 
 if (Meteor.isServer) {
   Meteor.methods({
@@ -14,11 +15,11 @@ if (Meteor.isServer) {
       }
 
       const profile = currentUser.profile;
-      if (!profile || !profile.questionnaire) {
+      if (!profile || !profile.questionnaires) {
         return false; // bad profile
       }
 
-      return _id in profile.questionnaire;
+      return profile.questionnaires.includes(_id);
     },
     'questionnaire.accessAuth': function auth(_id, accessToken) {
       check(_id, String);
